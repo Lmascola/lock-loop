@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "8G-WwUGtZr2rMcw0ycfot"
+uri = "file://artifacts/lockloop/assets/images/icon.png"
+type = "image"
+title = "lockloop app icon"

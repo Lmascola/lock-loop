@@ -1,0 +1,27 @@
+kind = "mobile"
+previewPath = "/"
+title = "lockloop"
+version = "1.0.0"
+id = "artifacts/lockloop"
+router = "expo-domain"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+ensurePreviewReachable = "/status"
+name = "expo"
+paths = [ "/" ]
+localPort = 23568
+
+[services.development]
+run = "pnpm --filter @workspace/lockloop run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/lockloop", "run", "build" ]
+run = [ "pnpm", "--filter", "@workspace/lockloop", "run", "serve" ]
+
+[services.env]
+PORT = "23568"
+BASE_PATH = "/"
