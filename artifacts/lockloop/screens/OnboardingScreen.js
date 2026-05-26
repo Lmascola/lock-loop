@@ -1,6 +1,6 @@
 import React,{useState,useContext} from "react";
 import {
-View,
+ScrollView,
 Text,
 TouchableOpacity,
 StyleSheet
@@ -63,7 +63,7 @@ onboarded:true
 };
 
 return(
-<View style={styles.container}>
+<ScrollView style={styles.container} contentContainerStyle={styles.content}>
 
 <Text style={styles.header}>
 What are you solving?
@@ -118,7 +118,7 @@ Enter LockLoop
 </Text>
 </TouchableOpacity>
 
-</View>
+</ScrollView>
 );
 }
 
@@ -126,7 +126,10 @@ const styles=StyleSheet.create({
 container:{
 flex:1,
 backgroundColor:"#050505",
-padding:25
+},
+content:{
+padding:25,
+paddingBottom:60
 },
 header:{
 color:"#4DA6FF",
