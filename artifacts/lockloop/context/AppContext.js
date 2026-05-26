@@ -1,52 +1,63 @@
-import React, { createContext, useState, useEffect } from "react";
+import React,{createContext,useState,useEffect} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const AppContext = createContext();
+export const AppContext=createContext();
 
-export const AppProvider = ({ children }) => {
-  const [timeSaved, setTimeSaved] = useState(0);
-  const [streak, setStreak] = useState(1);
-  const [enabled, setEnabled] = useState(true);
+export const AppProvider=({children})=>{
 
-  useEffect(() => {
-    loadData();
-  }, []);
+const [goal,setGoal]=useState("");
+const [strictness,setStrictness]=useState("Balanced");
+const [sessionLength,setSessionLength]=useState(15);
+const [timeSaved,setTimeSaved]=useState(0);
+const [onboarded,setOnboarded]=useState(false);
 
-  const loadData = async () => {
-    const saved = await AsyncStorage.getItem("lockloop");
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setTimeSaved(parsed.timeSaved);
-      setStreak(parsed.streak);
-      setEnabled(parsed.enabled);
-    }
-  };
+useEffect(()=>{
+load();
+},[]);
 
-  const saveData = async (data) => {
-    await AsyncStorage.setItem(
-      "lockloop",
-      JSON.stringify(data)
-    );
-  };
+const load=async()=>{
+const saved=await AsyncStorage.getItem("lockloop");
 
-  const updateState = (newData) => {
-    setTimeSaved(newData.timeSaved);
-    setStreak(newData.streak);
-    setEnabled(newData.enabled);
+if(saved){
+const data=JSON.parse(saved);
 
-    saveData(newData);
-  };
+setGoal(data.goal);
+setStrictness(data.strictness);
+setSessionLength(data.sessionLength);
+setTimeSaved(data.timeSaved);
+setOnboarded(data.onboarded);
+}
+};
 
-  return (
-    <AppContext.Provider
-      value={{
-        timeSaved,
-        streak,
-        enabled,
-        updateState
-      }}
-    >
-      {children}
-    </AppContext.Provider>
-  );
+const save=async(data)=>{
+await AsyncStorage.setItem(
+"lockloop",
+JSON.stringify(data)
+);
+};
+
+const update=(data)=>{
+setGoal(data.goal);
+setStrictness(data.strictness);
+setSessionLength(data.sessionLength);
+setTimeSaved(data.timeSaved);
+setOnboarded(data.onboarded);
+
+save(data);
+};
+
+return(
+<AppContext.Provider
+value={{
+goal,
+strictness,
+sessionLength,
+timeSaved,
+onboarded,
+update
+}}
+>
+{children}
+</AppContext.Provider>
+);
 };
