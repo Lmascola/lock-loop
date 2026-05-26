@@ -1,25 +1,28 @@
-import React, {useState} from "react";
+import React, { useContext } from "react";
 import { View, Text, StyleSheet, Switch } from "react-native";
+import { AppContext } from "../context/AppContext";
 
 export default function HomeScreen() {
-
-const [enabled,setEnabled]=useState(true);
+  const { enabled, timeSaved, streak, updateState } =
+    useContext(AppContext);
 
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>LOCKLOOP</Text>
 
-      <Text style={styles.subtitle}>
-        Attention Defense System
-      </Text>
-
       <Switch
-      value={enabled}
-      onValueChange={setEnabled}
+        value={enabled}
+        onValueChange={(val)=>
+          updateState({
+            enabled:val,
+            timeSaved,
+            streak
+          })
+        }
       />
 
       <Text style={styles.status}>
-        {enabled ? "Protection Active" : "Protection Disabled"}
+        {enabled ? "Protection Active" : "Disabled"}
       </Text>
     </View>
   );
@@ -33,16 +36,12 @@ justifyContent:"center",
 alignItems:"center"
 },
 logo:{
-color:"#4DA6FF",
 fontSize:38,
+color:"#4DA6FF",
 fontWeight:"700"
 },
-subtitle:{
-color:"#aaa",
-marginVertical:20
-},
 status:{
-color:"#fff",
-marginTop:20
+marginTop:20,
+color:"#fff"
 }
 });

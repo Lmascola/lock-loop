@@ -1,116 +1,113 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React,{useState,useEffect,useContext} from "react";
+import {
+View,
+Text,
+TouchableOpacity,
+StyleSheet
+} from "react-native";
 
-export default function FocusScreen() {
-  const [seconds, setSeconds] = useState(0);
-  const [locked, setLocked] = useState(false);
-  const [challengeDone, setChallengeDone] = useState(false);
+import {AppContext} from "../context/AppContext";
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSeconds((prev) => {
-        const next = prev + 1;
+export default function FocusScreen(){
 
-        if (next >= 20 && !locked) {
-          setLocked(true);
-        }
+const {
+timeSaved,
+streak,
+enabled,
+updateState
+}=useContext(AppContext);
 
-        return next;
-      });
-    }, 1000);
+const [seconds,setSeconds]=useState(0);
+const [locked,setLocked]=useState(false);
 
-    return () => clearInterval(timer);
-  }, []);
+useEffect(()=>{
 
-  const unlock = () => {
-    if (challengeDone) {
-      setLocked(false);
-      setSeconds(0);
-      setChallengeDone(false);
-    }
-  };
+if(!enabled)return;
 
-  return (
-    <View style={styles.container}>
-      {!locked ? (
-        <>
-          <Text style={styles.title}>Focus Tracking</Text>
-          <Text style={styles.timer}>{seconds}s</Text>
-          <Text style={styles.sub}>
-            Lock triggers after 20s (demo simulation)
-          </Text>
-        </>
-      ) : (
-        <>
-          <Text style={styles.lock}>INTERVENTION</Text>
-          <Text style={styles.sub}>
-            Tap challenge to prove intentional use
-          </Text>
+const timer=setInterval(()=>{
+setSeconds(prev=>{
 
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setChallengeDone(true)}
-          >
-            <Text style={styles.buttonText}>
-              Complete Challenge
-            </Text>
-          </TouchableOpacity>
+const next=prev+1;
 
-          {challengeDone && (
-            <TouchableOpacity
-              style={styles.unlock}
-              onPress={unlock}
-            >
-              <Text style={styles.buttonText}>
-                Unlock Session
-              </Text>
-            </TouchableOpacity>
-          )}
-        </>
-      )}
-    </View>
-  );
+if(next===20){
+setLocked(true);
+
+updateState({
+enabled,
+timeSaved:timeSaved+20,
+streak:streak+1
+});
 }
 
-const styles = StyleSheet.create({
-  container:{
-    flex:1,
-    backgroundColor:"#050505",
-    justifyContent:"center",
-    alignItems:"center"
-  },
-  title:{
-    color:"#4DA6FF",
-    fontSize:28,
-    fontWeight:"700"
-  },
-  timer:{
-    color:"#fff",
-    fontSize:54,
-    marginVertical:20
-  },
-  sub:{
-    color:"#999"
-  },
-  lock:{
-    color:"#4DA6FF",
-    fontSize:32,
-    fontWeight:"700"
-  },
-  button:{
-    marginTop:30,
-    backgroundColor:"#4DA6FF",
-    padding:18,
-    borderRadius:16
-  },
-  unlock:{
-    marginTop:20,
-    backgroundColor:"#222",
-    padding:18,
-    borderRadius:16
-  },
-  buttonText:{
-    color:"#fff",
-    fontWeight:"700"
-  }
+return next;
+
+});
+},1000);
+
+return()=>clearInterval(timer);
+
+},[enabled]);
+
+return(
+<View style={styles.container}>
+{!locked?(
+<>
+<Text style={styles.timer}>
+{seconds}s
+</Text>
+<Text style={styles.sub}>
+Monitoring loop behavior
+</Text>
+</>
+):(
+<>
+<Text style={styles.lock}>
+INTERVENTION
+</Text>
+
+<TouchableOpacity
+style={styles.button}
+onPress={()=>{
+setLocked(false);
+setSeconds(0);
+}}
+>
+<Text style={styles.text}>
+Resume Intentionally
+</Text>
+</TouchableOpacity>
+</>
+)}
+</View>
+);
+}
+
+const styles=StyleSheet.create({
+container:{
+flex:1,
+backgroundColor:"#050505",
+justifyContent:"center",
+alignItems:"center"
+},
+timer:{
+fontSize:60,
+color:"#4DA6FF"
+},
+sub:{
+color:"#999"
+},
+lock:{
+fontSize:34,
+color:"#4DA6FF",
+fontWeight:"700"
+},
+button:{
+marginTop:30,
+backgroundColor:"#4DA6FF",
+padding:18,
+borderRadius:16
+},
+text:{
+color:"#fff"
+}
 });
