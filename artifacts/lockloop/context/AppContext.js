@@ -48,6 +48,15 @@ setOnboarded(data.onboarded);
 save(data);
 };
 
+const reset=async()=>{
+await AsyncStorage.removeItem("lockloop");
+setGoal("");
+setStrictness("Balanced");
+setSessionLength(15);
+setTimeSaved(0);
+setOnboarded(false);
+};
+
 return(
 <AppContext.Provider
 value={{
@@ -57,7 +66,8 @@ sessionLength,
 timeSaved,
 onboarded,
 loaded,
-update
+update,
+reset
 }}
 >
 {children}

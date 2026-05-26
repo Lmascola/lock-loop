@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, Switch } from "react-native";
+import { View, Text, StyleSheet, Switch, TouchableOpacity } from "react-native";
 import { AppContext } from "../context/AppContext";
 
 export default function HomeScreen() {
-  const { goal, timeSaved } = useContext(AppContext);
+  const { goal, timeSaved, reset } = useContext(AppContext);
   const [enabled, setEnabled] = useState(true);
 
   return (
@@ -22,6 +22,10 @@ export default function HomeScreen() {
       </Text>
 
       <Text style={styles.saved}>{timeSaved} mins reclaimed</Text>
+
+      <TouchableOpacity style={styles.resetBtn} onPress={reset}>
+        <Text style={styles.resetText}>Reset & Re-onboard</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -52,5 +56,16 @@ const styles = StyleSheet.create({
     marginTop: 32,
     color: "#4DA6FF",
     fontSize: 16
+  },
+  resetBtn: {
+    marginTop: 48,
+    padding: 14,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: "#333"
+  },
+  resetText: {
+    color: "#555",
+    fontSize: 13
   }
 });
