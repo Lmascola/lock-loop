@@ -5,6 +5,7 @@ export const AppContext=createContext();
 
 export const AppProvider=({children})=>{
 
+const [name,setName]=useState("");
 const [goal,setGoal]=useState("");
 const [strictness,setStrictness]=useState("Balanced");
 const [sessionLength,setSessionLength]=useState(15);
@@ -22,9 +23,8 @@ const load=async()=>{
 const saved=await AsyncStorage.getItem("lockloop");
 
 if(saved){
-
 const data=JSON.parse(saved);
-
+setName(data.name||"");
 setGoal(data.goal);
 setStrictness(data.strictness);
 setSessionLength(data.sessionLength);
@@ -32,35 +32,30 @@ setTimeSaved(data.timeSaved);
 setOnboarded(data.onboarded);
 setEnabled(data.enabled||false);
 setMemory(data.memory||[]);
-
 }
 
 setLoaded(true);
 };
 
 const save=async(data)=>{
-await AsyncStorage.setItem(
-"lockloop",
-JSON.stringify(data)
-);
+await AsyncStorage.setItem("lockloop",JSON.stringify(data));
 };
 
 const update=(data)=>{
-
+setName(data.name||"");
 setGoal(data.goal);
 setStrictness(data.strictness);
 setSessionLength(data.sessionLength);
 setTimeSaved(data.timeSaved);
 setOnboarded(data.onboarded);
-setEnabled(data.enabled);
+setEnabled(data.enabled||false);
 setMemory(data.memory||[]);
-
 save(data);
-
 };
 
 const reset=async()=>{
 await AsyncStorage.removeItem("lockloop");
+setName("");
 setGoal("");
 setStrictness("Balanced");
 setSessionLength(15);
@@ -73,6 +68,7 @@ setMemory([]);
 return(
 <AppContext.Provider
 value={{
+name,
 goal,
 strictness,
 sessionLength,
