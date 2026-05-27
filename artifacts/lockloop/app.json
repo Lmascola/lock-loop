@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "LockLoop",
+    "scheme": "lockloop",
     "slug": "lockloop",
     "version": "1.0.0",
     "orientation": "portrait",
