@@ -10,6 +10,8 @@ const [strictness,setStrictness]=useState("Balanced");
 const [sessionLength,setSessionLength]=useState(15);
 const [timeSaved,setTimeSaved]=useState(0);
 const [onboarded,setOnboarded]=useState(false);
+const [enabled,setEnabled]=useState(false);
+const [memory,setMemory]=useState([]);
 const [loaded,setLoaded]=useState(false);
 
 useEffect(()=>{
@@ -20,12 +22,17 @@ const load=async()=>{
 const saved=await AsyncStorage.getItem("lockloop");
 
 if(saved){
+
 const data=JSON.parse(saved);
+
 setGoal(data.goal);
 setStrictness(data.strictness);
 setSessionLength(data.sessionLength);
 setTimeSaved(data.timeSaved);
 setOnboarded(data.onboarded);
+setEnabled(data.enabled||false);
+setMemory(data.memory||[]);
+
 }
 
 setLoaded(true);
@@ -39,13 +46,17 @@ JSON.stringify(data)
 };
 
 const update=(data)=>{
+
 setGoal(data.goal);
 setStrictness(data.strictness);
 setSessionLength(data.sessionLength);
 setTimeSaved(data.timeSaved);
 setOnboarded(data.onboarded);
+setEnabled(data.enabled);
+setMemory(data.memory||[]);
 
 save(data);
+
 };
 
 const reset=async()=>{
@@ -55,6 +66,8 @@ setStrictness("Balanced");
 setSessionLength(15);
 setTimeSaved(0);
 setOnboarded(false);
+setEnabled(false);
+setMemory([]);
 };
 
 return(
@@ -65,6 +78,8 @@ strictness,
 sessionLength,
 timeSaved,
 onboarded,
+enabled,
+memory,
 loaded,
 update,
 reset
@@ -73,4 +88,5 @@ reset
 {children}
 </AppContext.Provider>
 );
+
 };
